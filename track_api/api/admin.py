@@ -1,5 +1,5 @@
 # Register your models here.
-from django.contrib import admin
 from api.models import Pedido
+from django.contrib import admin
 
 admin.site.register(Pedido)
