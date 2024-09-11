@@ -1,4 +1,4 @@
-from api.serializers.users_serializers import UserSerializer, UserLoginSerializer
+from api.serializers.users_serializers import UserLoginSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.authtoken.models import Token
