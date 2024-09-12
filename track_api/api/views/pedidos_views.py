@@ -1,3 +1,4 @@
+from api.models import Pedido
 from api.serializers.pedidos_serializers import PedidoSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -20,3 +21,22 @@ class PedidosView(APIView):
         pedidos = request.user.pedidos.all()
         serializer = PedidoSerializer(pedidos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdatePedidoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk, format=None):
+        try:
+            pedido = request.user.pedidos.get(pk=pk)
+        except Pedido.DoesNotExist:
+            return Response(
+                {"error": "Pedido não encontrado."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        serializer = PedidoSerializer(pedido, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

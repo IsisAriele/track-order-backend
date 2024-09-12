@@ -1,12 +1,24 @@
 from api.models import Pedido
 from rest_framework import serializers
 
+STATUSES = (
+    ("EM_ANALISE", "Em análise"),
+    ("ACEITO", "Aceito"),
+    ("EM_SEPARACAO", "Em separação"),
+    ("CANCELADO", "Cancelado"),
+    ("EM_PREPARO", "Em preparo"),
+    ("EM_TRANSITO", "Em trânsito"),
+    ("ENTREGUE", "Entregue"),
+)
+
 
 class PedidoSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(choices=STATUSES, default="EM_ANALISE")
+
     class Meta:
         model = Pedido
-        fields = ["status", "updated_at", "created_at"]
-        read_only_fields = ["updated_at", "created_at"]
+        fields = ["id", "status", "updated_at", "created_at"]
+        read_only_fields = ["id", "updated_at", "created_at"]
 
     def validate_status(self, value):
         # Obter a lista de valores válidos de status a partir do modelo Pedido
