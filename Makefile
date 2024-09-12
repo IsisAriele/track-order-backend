@@ -28,9 +28,9 @@ code-quality/scan:
 	poetry run black --check .
 
 code-quality/format:
-	poetry run unimport -r track_api/
-	poetry run isort track_api/
-	poetry run black track_api/
+	poetry run unimport -r track_api/ track_websocket/
+	poetry run isort track_api/ track_websocket/
+	poetry run black track_api/ track_websocket/
 
 code-quality/tests:
 	poetry run pytest tests/

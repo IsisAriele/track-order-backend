@@ -1,4 +1,8 @@
 version: '2'
+
+networks:
+ kong-net:
+
 services:
   db:
     image: postgres
@@ -8,3 +12,27 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
       - DATABASE_URL=postgresql://postgres:postgres@db/postgres
+
+  api:
+    container_name: track_api
+    build: 
+      context: .
+      dockerfile: dockerfiles/api.Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+
+  websocket:
+    container_name: track_websocket
+    build: 
+      context: .
+      dockerfile: dockerfiles/websocket.Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      - POSTGRES_HOST=db
+    depends_on:
+      - db

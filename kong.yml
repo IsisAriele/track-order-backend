@@ -1,0 +1,56 @@
+_format_version: "3.0"
+_transform: true
+
+# Por padrão o Kong API Gateway roda na porta 8000
+services:
+  # Serviço de Autenticação
+  - name: auth-service
+    url: http://localhost:9000/api/login
+    routes:
+      - name: login-route
+        paths:
+          - /api/login
+        methods:
+          - POST
+        protocols:
+          - http
+          - https
+        strip_path: true  # Retira /api/login ao passar para o backend
+
+  # Serviço de Criação e Listagem de Pedidos
+  - name: pedidos-service
+    url: http://localhost:9000/api/pedidos
+    routes:
+      # Criar Pedido (POST)
+      - name: create-pedido-route
+        paths:
+          - /api/pedidos
+        methods:
+          - POST
+        protocols:
+          - http
+          - https
+        strip_path: true  # Retira /api/pedidos ao passar para o backend
+
+      # Listar Pedidos (GET)
+      - name: list-pedidos-route
+        paths:
+          - /api/pedidos
+        methods:
+          - GET
+        protocols:
+          - http
+          - https
+        strip_path: true  # Retira /api/pedidos ao passar para o backend
+
+  # Serviço WebSocket para Pedidos
+  - name: websocket-service
+    url: ws://localhost:8888
+    routes:
+      - name: websocket-route
+        paths:
+          - /ws/pedidos
+        protocols:
+          - ws
+          - wss
+        strip_path: false  # Mantém o caminho ao passar para o backend

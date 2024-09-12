@@ -7,12 +7,13 @@ from rest_framework.views import APIView
 
 
 class PedidosView(APIView):
+    # o is_authenticated é um decorator que verifica se o usuário está autenticado
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         serializer = PedidoSerializer(data=request.data)
         if serializer.is_valid():
-            pedido = serializer.save(user=request.user)
+            pedido = serializer.save(user=request.user) # request.user é o usuário autenticado (quem vem a partir do token)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
